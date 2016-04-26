@@ -1,0 +1,84 @@
+---
+server:
+  port: 8087
+
+endpoints:
+  shutdown:
+    enabled: true
+  restart:
+    enabled: true
+    
+shell:
+  ssh:
+    port: 2050
+zuul:
+  routes:
+    hystrix-dashboard:
+      path: /hystrix-dashboard/**
+      stripPrefix: false
+      
+logging:
+  level:
+    com.netflix: DEBUG
+  ribbon:
+    ConnectTimeout: 10000
+    
+com:
+  vennetics:
+    bell:
+      sam: 
+        apigateway:
+          server:
+            service:
+              httpsecurity:
+                admin:
+                  authorise: /api/**, /admin-service/**, /v1/applications/**
+                  permitAll: /hystrix.stream, /health, /info
+  
+# Hystrix configuration. Currently set to default values.
+hystrix:
+  threadpool:
+      default:
+        coreSize: 100
+  command: 
+      circuitBreaker:
+        requestVolumeThreshold: 20
+        errorThresholdPercentage: 50
+        sleepWindowInMilliseconds: 5000
+      execution:
+        timeout:
+          enabled: true
+        isolation:
+          thread:
+            timeoutInMilliseconds: 5000
+      metrics:
+        healthSnapshot:
+          intervalInMilliseconds: 500
+---
+# A profile that can be used to see how ribbon reacts to too many requests or
+# slow connections/reads 
+spring:
+  profiles: intolerantRibbon
+subscriber-cassandra:
+  ribbon:
+    MaxTotalHttpConnections: 1
+    ConnectTimeout: 1
+    ReadTimeout: 1
+
+---
+# A profile that can be used to see how hystrix reacts to slow reads 
+spring:
+  profiles: intolerantHystrix
+hystrix:
+  command:
+    subscriber-cassandra:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10
+    network-manager:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 15 
+            

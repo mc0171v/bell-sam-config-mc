@@ -1,0 +1,9 @@
+---
+server:
+  port: 8096
+shell:
+  ssh:
+    port: 2095
+security:
+  basic:
+    enabled: false

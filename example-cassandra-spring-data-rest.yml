@@ -1,0 +1,15 @@
+server:
+  port: 0
+shell:
+  ssh:
+    port: 2000
+security:
+  basic:
+    enabled: false
+spring:
+  data:
+    cassandra:
+      keyspace-name: bell_sam
+      # hostname of your Cassandra Docker instance
+      contact-points: bellsam_cassandra_1
+      port: 9042

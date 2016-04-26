@@ -1,0 +1,31 @@
+server:
+# Setting Port to 0 causes spring boot to randomise the port
+  port: 0
+shell:
+  ssh:
+    port: 2030
+security:
+  basic:
+    enabled: false
+    
+# Hystrix configuration. Currently set to default values.
+hystrix:
+  command:
+    GetSubscriberProfileCommand:
+      isolation:
+        thread:
+          timeoutInMilliseconds: 1000
+    default:
+      circuitBreaker:
+        requestVolumeThreshold: 20
+        errorThresholdPercentage: 50
+        sleepWindowInMilliseconds: 5000
+      execution:
+        timeout:
+          enabled: true
+        isolation:
+          thread:
+            timeoutInMilliseconds: 1000
+      metrics:
+        healthSnapshot:
+          intervalInMilliseconds: 500

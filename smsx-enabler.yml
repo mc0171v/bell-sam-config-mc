@@ -1,0 +1,81 @@
+---
+server:
+  port: 0
+shell:
+  ssh:
+    port: 2040
+security:
+  basic:
+    enabled: false
+smpp:
+  bindType: TRANSCEIVER
+  windowSize: 1
+  systemId: 123456789
+  password: password
+  requestExpiryTimeout: 10000
+  windowMonitorInterval: 10000
+  receiptingEnabled: false
+  maxConcurrentSessions: 1
+  enquireLinkPollingInterval: 15000
+  enquireLinkTimeoutMilliseconds: 5000
+  defaultRegion: CA
+  submitMessageTimeoutMilliseconds: 5000
+  smppUnbindTimeoutInMilliseconds: 5000
+  sourceAddress:
+    ton: 3
+    npi: 0
+  destinationAddress:
+    ton: 1
+    npi: 1
+  primarySmppConnection:
+    port: 2776
+    host: localhost
+    connectionTimeout: 6000
+  secondarySmppConnection:
+    port: 2777
+    host: localhost
+    connectionTimeout: 6000
+  outBoundThrottlingRate:
+    intervalInMilliseconds: 1000
+    maxTasksPerInterval: 200
+    throttlingRequestTimeoutMilliseconds: 2000
+  inBoundThrottlingRate:
+    intervalInMilliseconds: 1000
+    maxTasksPerInterval: 200
+    throttlingRequestTimeoutMilliseconds: 2000
+address:
+  defaultRegion: CA
+message:
+  maxSize: 160
+ribbon:
+  eureka:
+   enabled: false
+spring:
+  data:
+    cassandra:
+      keyspace-name: bell_sam
+      # hostname of your Cassandra Docker instance
+      contact-points: bellsam_cassandra_1
+      port: 9042
+---
+spring:
+  profiles: alternative
+smpp:
+  primarySmppConnection:
+    port: 31114
+---
+spring:
+  profiles: simulator
+smpp:
+  primarySmppConnection:
+    host: smscsimulator
+---
+spring:
+  profiles: bell_lab
+smpp:
+  systemId: XML_HATA
+  password: XML_lb
+  primarySmppConnection:
+    port: 31114
+    host: 10.47.24.52
+    connectionTimeout: 6000

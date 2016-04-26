@@ -1,0 +1,9 @@
+---
+info: 
+  foo: bar
+---
+# A profile that can be used to demonstrate how profiles are used to modify data retrieved
+spring:
+  profiles: test
+info:
+  foo: bart

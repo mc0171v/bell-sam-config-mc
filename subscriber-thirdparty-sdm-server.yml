@@ -1,0 +1,78 @@
+server:
+# Setting Port to 0 causes spring boot to randomise the port
+  port: 0
+shell:
+  ssh:
+    port: 2030
+security:
+  basic:
+    enabled: false
+    
+# Hystrix configuration. Currently set to default values.
+hystrix:
+  command:
+    GetSubscriberProfileCommand:
+      isolation:
+        thread:
+          timeoutInMilliseconds: 1000
+    default:
+      circuitBreaker:
+        requestVolumeThreshold: 20
+        errorThresholdPercentage: 50
+        sleepWindowInMilliseconds: 5000
+      execution:
+        timeout:
+          enabled: true
+        isolation:
+          thread:
+            timeoutInMilliseconds: 1000
+      metrics:
+        healthSnapshot:
+          intervalInMilliseconds: 500
+  
+# Service Specific configuration
+com:
+  vennetics:
+    bell:
+      sam:
+        subscriber:
+          thirdparty:
+            service:
+              sdm:
+                service:
+                  validOus: 022,023,206,409,410,502
+                  allQueryableAttributes: mdn,min,subId2,eamLanguage,ou,meid,UAProfURL,useragent,ppdProcIndicator,networkid
+
+---
+spring:
+  profiles: production
+
+# SDM LDAP Connections Properties
+com:
+  vennetics:
+    bell:
+      sam:
+        adapters:
+          sdm:
+            ldap:
+              adapters:
+                sdm:
+                  pool:
+                    connectTimeout: 1000
+                    loggingEnabled: false
+                    base: o=mobility,c=ca
+                    userDn: uid=samuser,ou=serviceplatform,c=ca
+                    password: SAMUser321
+                    urls: ldap://172.25.219.240:389,ldap://172.25.71.240:389
+                    maxActive: 20
+                    maxTotal: 20
+                    maxIdle: 5
+                    minIdle: 0
+                    maxWait: 10000
+                    whenExhaustedAction: 1
+                    testOnBorrow: false
+                    testOnReturn: false
+                    testWhileIdle: false
+                    timeBetweenEvictionRunsMillis: 30000
+                    numTestsPerEvictionRun: 5
+                    minEvictableIdleTimeMillis: 60000

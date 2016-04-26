@@ -1,0 +1,25 @@
+---
+server:
+  port: 8095
+shell:
+  ssh:
+    port: 2090
+security:
+  basic:
+    enabled: false  
+smpp:
+    port: 2776
+    maxConnectionSize: 10
+    nonBlockingSocketsEnabled: true
+    defaultRequestExpiryTimeout: 30000
+    defaultWindowMonitorInterval: 15000
+    defaultWindowSize: 5
+    defaultSessionCountersEnabled: true
+    jmxEnabled: true
+    systemId: 123456789
+    password: password
+---
+spring:
+  profiles: alternative
+smpp:
+  port: 31114
